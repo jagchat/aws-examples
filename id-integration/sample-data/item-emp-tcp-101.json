@@ -1,0 +1,28 @@
+{
+	"orgTenantId": "TCP",
+	"entityId": "emp-101",
+	"entityInfo": {
+		"type": "emp",
+		"fields": [
+			"empId",
+			"firstName"
+		],
+		"recordId": "101"
+	},
+	"data": [
+		{
+			"key": "paycor",
+			"value": "paycor-101"
+		},
+		{
+			"key": "bcbs",
+			"value": "bcbs-101"
+		}
+	],
+	"audit": {
+		"dateCreated": "01/01/2021",
+		"userCreated": "admin",
+		"dateUpdated": "01/01/2021",
+		"userUpdated": "admin"
+	}
+}

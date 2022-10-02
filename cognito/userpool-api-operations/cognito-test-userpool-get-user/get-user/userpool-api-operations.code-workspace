@@ -1,0 +1,66 @@
+{
+	"folders": [
+		{
+			"name": "userpool-api-operations",
+			"path": "..\\.."
+		}
+	],
+	"launch": {
+		"configurations": [
+			{
+				"type": "aws-sam",
+				"request": "direct-invoke",
+				"name": "cognito-test-userpool-get-user:GetUserFunction",
+				"invokeTarget": {
+					"target": "template",
+					"templatePath": "${workspaceFolder}/cognito-test-userpool-get-user/template.yaml",
+					"logicalId": "GetUserFunction"
+				},
+				"lambda": {
+					"payload": {
+						"json": {
+							"userId": "scott"
+						}
+					},
+					"environmentVariables": {
+						"COGNITO_USER_POOL_ID": "us-east-2_32QZBjg1x"
+					}
+				}
+			},
+			{
+				"type": "aws-sam",
+				"request": "direct-invoke",
+				"name": "cognito-test-userpool-get-user:GetUserFunction (nodejs14.x)",
+				"invokeTarget": {
+					"target": "template",
+					"templatePath": "${workspaceFolder}/cognito-test-userpool-get-user/template.yaml",
+					"logicalId": "GetUserFunction"
+				},
+				"lambda": {
+					"payload": {},
+					"environmentVariables": {}
+				}
+			},
+			{
+				"type": "aws-sam",
+				"request": "direct-invoke",
+				"name": "API cognito-test-userpool-get-user:GetUserFunction (nodejs14.x)",
+				"invokeTarget": {
+					"target": "api",
+					"templatePath": "${workspaceFolder}/cognito-test-userpool-get-user/template.yaml",
+					"logicalId": "GetUserFunction"
+				},
+				"api": {
+					"path": "/get-user",
+					"httpMethod": "get",
+					"payload": {
+						"json": {}
+					}
+				},
+				"lambda": {
+					"runtime": "nodejs14.x"
+				}
+			}
+		]
+	}
+}

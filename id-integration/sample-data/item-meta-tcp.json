@@ -1,0 +1,29 @@
+{
+	"orgTenantId": "TCP",
+	"entityId": "TCP-meta",
+	"entityInfo": {
+		"type": "meta"
+	},
+	"data": [
+		{
+			"value": "TCP Software",
+			"key": "name"
+		}
+	],
+	"dataSecondary": [
+		{
+			"value": "http://AnyPayroll.com",
+			"key": "payroll-url"
+		},
+		{
+			"value": "pm001",
+			"key": "paypal-merchant-id"
+		}
+	],
+	"audit": {
+		"userUpdated": "admin",
+		"dateCreated": "01/01/2021",
+		"userCreated": "admin",
+		"dateUpdated": "01/01/2021"
+	}
+}

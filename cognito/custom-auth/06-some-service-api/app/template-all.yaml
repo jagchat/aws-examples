@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  DemoMathApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Dev
+
+  DemoMathGetSumLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DemoMathGetSumLambda
+      Handler: get-sum.handler
+      Runtime: nodejs14.x
+      Timeout: 10
+      Events:
+        DemoMathGetSumEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DemoMathApi
+            Path: /sum/{a}/{b}
+            Method: GET
+

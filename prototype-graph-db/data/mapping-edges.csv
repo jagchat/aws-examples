@@ -1,0 +1,27 @@
+~id, ~from, ~to, ~label
+e1,tcp,tcp-tenant-abc,contains-tenant
+e2,tcp,tcp-tenant-xyz,contains-tenant
+e3,tcp-tenant-abc,tcp-tenant-abc-employee-101,contains-entity
+e4,tcp-tenant-abc,tcp-tenant-abc-employee-102,contains-entity
+e5,tcp-tenant-xyz,tcp-tenant-xyz-employee-201,contains-entity
+e6,tcp-tenant-abc,tcp-tenant-abc-jc-1001,contains-entity
+e7,tcp-tenant-abc,tcp-tenant-abc-jc-1002,contains-entity
+e8,paycor,paycor-p101,contains-ext-entity
+e9,paycor,paycor-p102,contains-ext-entity
+e10,paycor,paycor-p201,contains-ext-entity
+e11,bcbs,bcbs-b101,contains-ext-entity
+e12,bcbs,bcbs-b102,contains-ext-entity
+e13,bcbs,bcbs-b201,contains-ext-entity
+e14,paycor-p101,tcp-tenant-abc-employee-101,belongs-to
+e15,paycor-p102,tcp-tenant-abc-employee-102,belongs-to
+e16,paycor-p201,tcp-tenant-xyz-employee-201,belongs-to
+e17,bcbs-b101,tcp-tenant-abc-employee-101,belongs-to
+e18,bcbs-b102,tcp-tenant-abc-employee-102,belongs-to
+e19,bcbs-b201,tcp-tenant-xyz-employee-201,belongs-to
+e20,tcp-tenant-abc-employee-101,paycor-p101,maps-to
+e21,tcp-tenant-abc-employee-102,paycor-p102,maps-to
+e22,tcp-tenant-xyz-employee-201,paycor-p201,maps-to
+e23,tcp-tenant-abc-employee-101,bcbs-b101,maps-to
+e24,tcp-tenant-abc-employee-102,bcbs-b102,maps-to
+e25,tcp-tenant-xyz-employee-201,bcbs-b201,maps-to
+

@@ -1,0 +1,8 @@
+{
+	"orgTenantId": "bcbs",
+	"entityId": "bcbs-101",
+	"map": {
+		"orgTenantId": "TCP",
+		"entityId": "emp-101"
+	}
+}

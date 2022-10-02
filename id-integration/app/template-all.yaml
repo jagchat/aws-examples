@@ -1,0 +1,124 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+    TableName:
+        Type: String
+        Default: IdIntegrationTable
+
+Resources:
+  IdIntegrationApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Dev
+
+  IdIntegrationGetItemByKeyLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: IdIntegrationGetItemByKeyLambda
+      Handler: lambda/handlers/get-item-by-key.handler
+      Runtime: nodejs14.x
+      Timeout: 10
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Environment:
+        Variables:
+          IdIntegrationParamStoreConfig: !Sub '{"tablename": "${TableName}"}'          
+      Events:
+        IdIntegrationGetItemByKeyApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref IdIntegrationApi
+            Path: /items/{orgTenantId}/{entityId}
+            Method: GET
+
+  IdIntegrationGetItemsByPartitionLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: IdIntegrationGetItemsByPartitionLambda
+      Handler:  lambda/handlers/get-items-by-partition.handler
+      Runtime: nodejs14.x
+      Timeout: 10
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Environment:
+        Variables:
+          IdIntegrationParamStoreConfig: !Sub '{"tablename": "${TableName}"}'          
+      Events:
+        IdIntegrationGetItemsByPartitionApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref IdIntegrationApi
+            Path: /items/{orgTenantId}
+            Method: GET
+
+  IdIntegrationSaveItemLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: IdIntegrationSaveItemLambda
+      Handler: lambda/handlers/save-item.handler
+      Runtime: nodejs14.x
+      Timeout: 10
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Environment:
+        Variables:
+          IdIntegrationParamStoreConfig: !Sub '{"tablename": "${TableName}"}'          
+      Events:
+        IdIntegrationSaveItemApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref IdIntegrationApi
+            Path: /items
+            Method: POST
+
+  IdIntegrationDeleteItemLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: IdIntegrationDeleteItemLambda
+      Handler: lambda/handlers/delete-item.handler
+      Runtime: nodejs14.x
+      Timeout: 10
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Environment:
+        Variables:
+          IdIntegrationParamStoreConfig: !Sub '{"tablename": "${TableName}"}'          
+      Events:
+        IdIntegrationGetItemsByPartitionApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref IdIntegrationApi
+            Path: /items/{orgTenantId}/{entityId}
+            Method: DELETE            
+
+  
+  # DynamoDB Table
+  # NOTE: The following works during deployment.  However, if table already exists, it would throw error
+  IdIntegrationTableSpec:
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      TableName: !Ref TableName
+      #NOTE: do not include non-key atrributes in Attribute Definitions
+      AttributeDefinitions: 
+        - 
+          AttributeName: "orgTenantId"
+          AttributeType: "S"
+        - 
+          AttributeName: "entityId"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "orgTenantId"
+          KeyType: "HASH"
+        - 
+          AttributeName: "entityId"
+          KeyType: "RANGE"
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      

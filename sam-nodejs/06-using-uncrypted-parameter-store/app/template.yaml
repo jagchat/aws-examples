@@ -1,0 +1,62 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  DemoUnencParamStoreParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: 'DemoUnencParamStoreConfig'
+      Description: 'Sample dev config values for demo app'
+      Type: String
+      Value: '{"key": "value-from-param-store"}'
+
+  DemoUnencParamStoreApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Dev
+
+  DemoUnencParamStoreLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DemoUnencParamStoreLambda
+      Handler: index.handler
+      Runtime: nodejs14.x
+      Timeout: 10
+      Role: !GetAtt DemoUnencParamStoreLambdaRoleDev.Arn
+      Environment:
+        Variables:
+          DemoUnencParamStoreConfig: '{"key": "value-from-env-variable"}'          
+      Events:
+        DemoUnencParamStoreApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DemoUnencParamStoreApi
+            Path: /
+            Method: GET
+
+  DemoUnencParamStoreLambdaRoleDev:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - 'lambda.amazonaws.com'
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      Policies:
+        -
+          PolicyName: 'DemoUnencParamStoreParameterAccess'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - 'ssm:GetParameter*'
+                Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/DemoUnencParamStoreConfig*'

@@ -1,0 +1,67 @@
+{
+	"folders": [
+		{
+			"name": "userpool-api-operations",
+			"path": "..\\.."
+		}
+	],
+	"launch": {
+		"configurations": [
+			{
+				"type": "aws-sam",
+				"request": "direct-invoke",
+				"name": "cognito-test-userpool-ensure-user:EnsureUserFunction",
+				"invokeTarget": {
+					"target": "template",
+					"templatePath": "${workspaceFolder}/cognito-test-userpool-ensure-user/template.yaml",
+					"logicalId": "EnsureUserFunction"
+				},
+				"lambda": {
+					"payload": {
+						"json": {
+							"userId": "scott"
+						}
+					},
+					"environmentVariables": {
+						"COGNITO_USER_POOL_ID": "us-east-2_32QZBjg1x",
+						"USER_SERVICE_ENDPOINT": "https://1rl7kpj033.execute-api.us-east-2.amazonaws.com/Dev"
+					}
+				}
+			},
+			{
+				"type": "aws-sam",
+				"request": "direct-invoke",
+				"name": "cognito-test-userpool-ensure-user:EnsureUserFunction (nodejs14.x)",
+				"invokeTarget": {
+					"target": "template",
+					"templatePath": "${workspaceFolder}/cognito-test-userpool-ensure-user/template.yaml",
+					"logicalId": "EnsureUserFunction"
+				},
+				"lambda": {
+					"payload": {},
+					"environmentVariables": {}
+				}
+			},
+			{
+				"type": "aws-sam",
+				"request": "direct-invoke",
+				"name": "API cognito-test-userpool-ensure-user:EnsureUserFunction (nodejs14.x)",
+				"invokeTarget": {
+					"target": "api",
+					"templatePath": "${workspaceFolder}/cognito-test-userpool-ensure-user/template.yaml",
+					"logicalId": "EnsureUserFunction"
+				},
+				"api": {
+					"path": "/ensure-user",
+					"httpMethod": "get",
+					"payload": {
+						"json": {}
+					}
+				},
+				"lambda": {
+					"runtime": "nodejs14.x"
+				}
+			}
+		]
+	}
+}

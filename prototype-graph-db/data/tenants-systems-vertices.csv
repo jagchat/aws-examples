@@ -1,0 +1,6 @@
+~id, name:String, ~label
+tcp,"TCP",sor
+tcp-tenant-abc,"abc",sor-tenant
+tcp-tenant-xyz,"xyz",sor-tenant
+paycor,"Paycor",ext-system
+bcbs,"BCBS",ext-system

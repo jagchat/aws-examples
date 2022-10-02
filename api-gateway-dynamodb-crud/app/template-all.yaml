@@ -1,0 +1,147 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+    TableName:
+        Type: String
+        Default: DemoTable
+
+Resources:
+  DemoDynamoDbCrudApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Dev
+
+  DemoDynamoDbGetAllLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DemoDynamoDbGetAllLambda
+      Handler: get-all-items.handler
+      Runtime: nodejs14.x
+      Timeout: 10
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Environment:
+        Variables:
+          DemoDynamoDbParamStoreConfig: !Sub '{"tablename": "${TableName}"}'          
+      Events:
+        DemoDynamoDbGetAllApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DemoDynamoDbCrudApi
+            Path: /items
+            Method: GET
+
+  DemoDynamoDbGetItemsByPartitionLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DemoDynamoDbGetItemsByPartitionLambda
+      Handler: get-items-by-partition.handler
+      Runtime: nodejs14.x
+      Timeout: 10
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Environment:
+        Variables:
+          DemoDynamoDbParamStoreConfig: !Sub '{"tablename": "${TableName}"}'          
+      Events:
+        DemoDynamoDbGetItemsByPartitionApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DemoDynamoDbCrudApi
+            Path: /items/{album}
+            Method: GET
+
+  DemoDynamoDbGetItemByKeyLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DemoDynamoDbGetItemByKeyLambda
+      Handler: get-item-by-key.handler
+      Runtime: nodejs14.x
+      Timeout: 10
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Environment:
+        Variables:
+          DemoDynamoDbParamStoreConfig: !Sub '{"tablename": "${TableName}"}'          
+      Events:
+        DemoDynamoDbGetItemByKeyApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DemoDynamoDbCrudApi
+            # in this case, primary key involves both partition key (album) and sort key (artist)
+            Path: /items/{album}/{artist}
+            Method: GET
+
+  DemoDynamoDbAddItemLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DemoDynamoDbAddItemLambda
+      Handler: add-item.handler
+      Runtime: nodejs14.x
+      Timeout: 10
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Environment:
+        Variables:
+          DemoDynamoDbParamStoreConfig: !Sub '{"tablename": "${TableName}"}'          
+      Events:
+        DemoDynamoDbAddItemApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DemoDynamoDbCrudApi
+            Path: /items
+            Method: POST
+
+  DemoDynamoDbDeleteItemLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DemoDynamoDbDeleteItemLambda
+      Handler: delete-item.handler
+      Runtime: nodejs14.x
+      Timeout: 10
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
+      Environment:
+        Variables:
+          DemoDynamoDbParamStoreConfig: !Sub '{"tablename": "${TableName}"}'          
+      Events:
+        DemoDynamoDbDeleteItemApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DemoDynamoDbCrudApi
+            Path: /items/{album}/{artist}
+            Method: DELETE
+
+  
+  # DynamoDB Table
+  # NOTE: The following works during deployment.  However, if table already exists, it would throw error
+  DemoTableSpec:
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      TableName: !Ref TableName
+      #NOTE: do not include non-key atrributes in Attribute Definitions
+      #ref: https://stackoverflow.com/questions/30866030/number-of-attributes-in-key-schema-must-match-the-number-of-attributes-defined-i
+      AttributeDefinitions: 
+        - 
+          AttributeName: "Album"
+          AttributeType: "S"
+        - 
+          AttributeName: "Artist"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "Album"
+          KeyType: "HASH"
+        - 
+          AttributeName: "Artist"
+          KeyType: "RANGE"
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      

@@ -1,0 +1,69 @@
+{
+	"orgTenantId": {
+		"S": "TCP"
+	},
+	"entityId": {
+		"S": "TCP-meta"
+	},
+	"entityInfo": {
+		"M": {
+			"type": {
+				"S": "meta"
+			}
+		}
+	},
+	"data": {
+		"L": [
+			{
+				"M": {
+					"key": {
+						"S": "name"
+					},
+					"value": {
+						"S": "TCP Software"
+					}
+				}
+			}
+		]
+	},
+	"dataSecondary": {
+		"L": [
+			{
+				"M": {
+					"key": {
+						"S": "payroll-url"
+					},
+					"value": {
+						"S": "http://AnyPayroll.com"
+					}
+				}
+			},
+			{
+				"M": {
+					"key": {
+						"S": "paypal-merchant-id"
+					},
+					"value": {
+						"S": "pm001"
+					}
+				}
+			}
+		]
+	},
+	"audit": {
+		"M": {
+			"dateCreated": {
+				"S": "01/01/2021"
+			},
+			"userCreated": {
+				"S": "admin"
+			},
+			"dateUpdated": {
+				"S": "01/01/2021"
+			},
+			"userUpdated": {
+				"S": "admin"
+			}
+		}
+	}
+}

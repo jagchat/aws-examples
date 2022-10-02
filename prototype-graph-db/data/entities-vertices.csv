@@ -1,0 +1,12 @@
+~id, recordId:String, ~label
+tcp-tenant-abc-employee-101,"101",employee
+tcp-tenant-abc-employee-102,"102",employee
+tcp-tenant-xyz-employee-201,"201",employee
+tcp-tenant-abc-jc-1001,"j001",jobcode
+tcp-tenant-abc-jc-1002,"j002",jobcode
+paycor-p101,"p101",ext-record
+paycor-p102,"p102",ext-record
+paycor-p201,"p201",ext-record
+bcbs-b101,"b101",ext-record
+bcbs-b102,"b102",ext-record
+bcbs-b201,"b201",ext-record

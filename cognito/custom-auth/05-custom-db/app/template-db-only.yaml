@@ -1,0 +1,30 @@
+#NOTE: It is not essential to separate db deployment.  But, redeployment of updated code along with db is going to be possible only if db does not exist
+AWSTemplateFormatVersion : '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+    TableName:
+        Type: String
+        Default: DemoUserTable
+
+Resources:  
+  DemoUserTableSpec:
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      TableName: !Ref TableName
+      #NOTE: do not include non-key atrributes in Attribute Definitions
+      #ref: https://stackoverflow.com/questions/30866030/number-of-attributes-in-key-schema-must-match-the-number-of-attributes-defined-i
+      AttributeDefinitions: 
+        - 
+          AttributeName: "UserId"
+          AttributeType: "S"
+
+      KeySchema: 
+        - 
+          AttributeName: "UserId"
+          KeyType: "HASH"
+
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      
